@@ -14,6 +14,8 @@ public class JumpCharacter : MonoBehaviour
     public float downSpeed = 3;
     public bool rightHang = false;
     public bool leftHang = false;
+    public GameObject jumpEffect;
+    public GameObject landEffect;
     Rigidbody rb;
     // Start is called before the first frame update
     void Start()
@@ -26,6 +28,7 @@ public class JumpCharacter : MonoBehaviour
     {
         if (!Game.Instance.active)
         {
+            rb.velocity = Vector3.zero;
             return;
         }
         //Jumping
@@ -41,7 +44,7 @@ public class JumpCharacter : MonoBehaviour
         }
         else if (Controls.Jump && jumpHeld)
         {
-            float f = Mathf.Min(10, 20 * (0.25f * (Time.time - jumpStarted)));
+            float f = Mathf.Min(10, 50 * (0.25f * (Time.time - jumpStarted)));
             rb.AddForce(-Vector3.up * Time.deltaTime * glideForce * f, ForceMode.VelocityChange);
         }
         else if (!Controls.Jump)
@@ -95,6 +98,8 @@ public class JumpCharacter : MonoBehaviour
 
     void Jump()
     {
+        jumpEffect.SetActive(false);
+        jumpEffect.SetActive(true);
         if (rightHang && !leftHang)
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpForce / 2, 0);
@@ -111,5 +116,11 @@ public class JumpCharacter : MonoBehaviour
         }
         jumpStarted = Time.time;
         jumpHeld = true;
+    }
+    public void Land(Vector2 pos)
+    {
+        landEffect.transform.position = pos;
+        landEffect.SetActive(false);
+        landEffect.SetActive(true);
     }
 }

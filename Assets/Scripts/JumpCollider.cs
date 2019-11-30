@@ -30,21 +30,33 @@ public class JumpCollider : MonoBehaviour
     }
     void OnTriggerStay(Collider col)
     {
-        if (col.tag == "Player")
+        if (col.tag != "Wall")
         {
             return;
         }
         groundedResetTimer = Time.time;
         if (handleGrounded)
         {
+            if (!jumpCharacter.grounded)
+            {
+                jumpCharacter.Land(transform.position);
+            }
             jumpCharacter.grounded = true;
         }
         if (rightHang)
         {
+            if (!jumpCharacter.rightHang && Controls.Right)
+            {
+                jumpCharacter.Land(transform.position);
+            }
             jumpCharacter.rightHang = true;
         }
         if (leftHang)
         {
+            if (!jumpCharacter.leftHang && Controls.Left)
+            {
+                jumpCharacter.Land(transform.position);
+            }
             jumpCharacter.leftHang = true;
         }
         jumpCharacter.canDouble = true;
